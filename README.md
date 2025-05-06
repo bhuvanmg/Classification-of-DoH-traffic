@@ -204,7 +204,7 @@ There are several options how to install dnsproxy.
 
 - Grab the binary for your device/OS from the [Releases](https://github.com/AdguardTeam/dnsproxy/releases) page.
 - using make build from the following repo: [dnsproxy](https://github.com/AdguardTeam/dnsproxy)
-
+- use the binary in this [repo](https://github.com/bhuvanmg/Classification-of-DoH-traffic.git)
 
 Usage : 
 
@@ -329,5 +329,12 @@ The code for the above algorithms are listed in the repo.
 Each algorithm generates 500-3000 domain names.
 We send dns requests for each of these domains to our server https://dohe.live using dns_query.py which sends it through our dnsproxy.
 We send these requests for in a loop and capture the traffic using wireshark.
+
+To run :
+
+```bash
+git clone https://github.com/bhuvanmg/Classification-of-DoH-traffic.git
+```
+Go to dga and run dns_query.bat file(this sends dns requests in a loop for as long as needed to capture traffic).
 
 The traffic captured is given in the dga_pcaps folder which is converted to csv using DoHLyzer.
