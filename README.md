@@ -127,7 +127,7 @@ if it returns your server ip, everything is set up correctly.
 
 #### 2. DNSExfiltrator Installation : 
 
-install python version 2.7 and pip for python2: 
+Install python version 2.7 and pip for python2: 
 
 ```bash
 sudo apt update
@@ -155,7 +155,7 @@ Run DNSExfiltrator server using :
 ```bash
  python2 dnsexfiltrator.py -d tunnel.dohe.live -p password
 ```
-to keep the server running for long durations, the server can be run as a bsckground process.   
+to keep the server running for long durations, the server can be run as a background process.   
 
 The server is now setup and any computer can send files via dns-over-https to the server using tunnel.dohe.live as domain.  
 Users can change domain name and password as needed.
@@ -165,6 +165,7 @@ Users can change domain name and password as needed.
 
 #### 1. DNSExfiltrator Installation: 
 
+#### General Installation
 System requirements : Windows, powershell
 
 ```bash
@@ -178,9 +179,20 @@ To Run DNSExfiltrator (from DNSExfiltrator/release directory):
 ./dnsExfiltrator.exe <file name> <domain> <password>
 ```
 
+#### Direct Installation:
+
+```bash
+git clone https://github.com/bhuvanmg/Classification-of-DoH-traffic.git
+```
+go to DNSExfiltrator/release directory 
+
 To send 100 text files we use the scripts inside DNSExfiltrator.  
 gen_data.sh -> generates 100 random txt files  
 exfil_data.sh -> sends the 100 txt files to our server continously for 8 hours.
+```powershell
+./gen_data.ps1
+./exfil_data.ps1
+```
 
 We send these files over DoH and capture the traffic using wireshark.  
 
