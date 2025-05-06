@@ -271,9 +271,9 @@ sudo apt install certbot
 ```bash
 sudo certbot certonly --standalone -d dohe.live
 ```
-It will create cert files here:
-/etc/letsencrypt/live/dohe.live/fullchain.pem
-/etc/letsencrypt/live/dohe.live/privkey.pem
+It will create cert files here:  
+/etc/letsencrypt/live/dohe.live/fullchain.pem  
+/etc/letsencrypt/live/dohe.live/privkey.pem  
 
 You now have real, trusted SSL certificates!
 
