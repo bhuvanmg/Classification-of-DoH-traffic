@@ -1,0 +1,2 @@
+[console_scripts]
+dohlyzer = meter.dohlyzer:main
