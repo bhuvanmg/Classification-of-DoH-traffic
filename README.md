@@ -21,7 +21,24 @@ This project focuses on simulating, capturing, and analyzing Domain Generation A
 
 ## 🛠️ Installation
 
-Clone the repository:
+
+### DNSExfiltrator setup
+
+### Server 
+
+DNSExfiltrator is a proof-of-concept (PoC) tool designed to demonstrate how data can be exfiltrated over the DNS protocol. It works by encoding data into DNS queries, which are sent to an attacker-controlled domain. A DNS server controlled by the attacker decodes the incoming queries and reconstructs the original data.
+This technique is commonly used in real-world scenarios where traditional outbound channels (HTTP, FTP, etc.) are monitored or blocked, but DNS traffic is still permitted. DNSExfiltrator helps simulate this behavior for research, detection, and defense testing.
+
+In this project, DNSExfiltrator is used to generate labeled examples of DNS tunneling traffic. We use DNSExfiltrator to send 100 txt files over DNS to our remote server. We use DNS-over-HTTPS (DoH) protocol to send data. 
+
+#### Requirements
+
+- DNS Server and Domain (we used dohe.live and tunnel.dohe.live for dga and dns tunneling respectively)
+- DNSExfiltrator 
+- dnsproxy
+- doh-server
+- Coredns
+
 
 ```bash
 git clone https://github.com/yourusername/dns-traffic-classification.git
