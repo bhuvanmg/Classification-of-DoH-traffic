@@ -300,14 +300,14 @@ The server is now listening on port 443 for DoH and forwards thfobberese request
 Install dnsproxy as mentioned above.
 Run dnsproxy forwarding requests to our server:
 ```bash
-dnsproxy.exe -l 127.0.0.1 -p 53 -u https://dohe.live/dns-query -b 8.8.8.8:53
+dnsproxy.exe -l 127.0.0.1 -p 45 -u https://dohe.live/dns-query -b 8.8.8.8:53
 ```
-
+We use port 45 to differntiate our dga traffic from other normal dns traffic.
 To skip TLS certificate validation, use --insecure flag with dnsproxy. There is no need to setup certificates for the server using certbot if using --insecure.
 
 example usage :
 ```bash
-dnsproxy.exe -l 127.0.0.1 -p 53 -u https://dohe.live/dns-query -b 8.8.8.8:53 --insecure
+dnsproxy.exe -l 127.0.0.1 -p 45 -u https://dohe.live/dns-query -b 8.8.8.8:53 --insecure
 ```
 
 #### 2. Domain Generation algorithms
