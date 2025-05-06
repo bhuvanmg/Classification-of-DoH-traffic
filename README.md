@@ -41,8 +41,9 @@ In this project, DNSExfiltrator is used to generate labeled examples of DNS tunn
 
 - First we setup our server on any virtual machine.
   System version : Ubuntu 22.04
+- server domain - tunnel.dohe.live
   
-#### Coredns Installation: 
+#### 1. Coredns Installation: 
 
 Install go version 1.21.4
 
@@ -124,7 +125,7 @@ dig tunnel.dohe.live
 if it returns your server ip, everything is set up correctly.
 
 
-#### DNSExfiltrator Installation : 
+#### 2. DNSExfiltrator Installation : 
 
 install python version 2.7 and pip for python2: 
 
@@ -162,7 +163,7 @@ Users can change domain name and password as needed.
 
 #### CLIENT SETUP
 
-#### DNSExfiltrator Installation: 
+#### 1. DNSExfiltrator Installation: 
 
 System requirements : Windows, powershell
 
@@ -185,7 +186,7 @@ We send these files over DoH and capture the traffic using wireshark.
 
 To send them over DoH we need dnsproxy, which sends all DNS Traffic over https using adgurad or google dns servers.
 
-#### dnsproxy Installation: 
+#### 2. dnsproxy Installation: 
 
 There are several options how to install dnsproxy.
 
@@ -216,9 +217,105 @@ The traffic captured is given in the dnsexfil_pcaps folder which is converted to
 
 Domain Generation Algorithms (DGAs) are techniques used by malware to algorithmically generate a large number of domain names that can be used for command-and-control (C2) communication. Instead of hardcoding a single server address, DGAs allow malware to contact different domains daily or even hourly, making it more difficult for defenders to block malicious traffic or take down C2 servers.  
 
+server domain - dohe.live
 
 #### SERVER SETUP :
 
+#### 1. Coredns Installation 
 
+Install coredns as detailed above.  
+Change the Corefile config as below
 
+Corefile:
+```bash
+.:53 {
+        template IN A {
+        match .*
+        answer "{{ .Name }} 60 IN A 99.99.99.99"
+        }
+        log
+        errors
+}
+```
 
+Now we need a DoH server to simulate DNS traffic. Since coredns does not support DoH replies.
+
+#### 2. DoH server Installation
+
+```bash
+git clone https://github.com/m13253/dns-over-https.git
+cd dns-over-https
+cd doh-server
+```
+
+For Dns-over-https, we need to setup certificates and key for our server(https://dohe.live)
+
+#### using certbot for cert files:
+
+```bash
+sudo apt update
+sudo apt install certbot
+```
+```bash
+sudo certbot certonly --standalone -d dohe.live
+```
+It will create cert files here:
+/etc/letsencrypt/live/dohe.live/fullchain.pem
+/etc/letsencrypt/live/dohe.live/privkey.pem
+
+You now have real, trusted SSL certificates!
+
+Now replace the dns-over-https/doh-server/doh-server.conf file with doh-server.conf file in this repo.
+
+Run DoH server and coredns server after everything is setup:  
+
+From doh-server run :
+```powershell
+./doh-server -conf doh-server.conf
+```
+
+From etc/coredns run :
+```powershell
+coredns -conf Corefile
+```
+
+The server is now listening on port 443 for DoH and forwards thfobberese requests to coredns server running on port 53 and sends replies back to client.
+
+#### CLIENT SETUP 
+
+#### 1. dnsproxy 
+
+Install dnsproxy as mentioned above.
+Run dnsproxy forwarding requests to our server:
+```bash
+dnsproxy.exe -l 127.0.0.1 -p 53 -u https://dohe.live/dns-query -b 8.8.8.8:53
+```
+
+To skip TLS certificate validation, use --insecure flag with dnsproxy. There is no need to setup certificates for the server using certbot if using --insecure.
+
+example usage :
+```bash
+dnsproxy.exe -l 127.0.0.1 -p 53 -u https://dohe.live/dns-query -b 8.8.8.8:53 --insecure
+```
+
+#### 2. Domain Generation algorithms
+
+We used the following 10 algorithms : 
+- banjori
+- fobber
+- fosniw
+- murofet
+- mydoom
+- necurs
+- orchard
+- qadars
+- qakbot
+- tinba
+
+The code for the above algorithms are listed in the repo.
+
+Each algorithm generates 500-3000 domain names.
+We send dns requests for each of these domains to our server https://dohe.live using dns_query.py which sends it through our dnsproxy.
+We send these requests for in a loop and capture the traffic using wireshark.
+
+The traffic captured is given in the dga_pcaps folder which is converted to csv using DoHLyzer.
