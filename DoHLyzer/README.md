@@ -1,8 +1,8 @@
 ## DoHLyzer Setup 
 
-Requirements:
-Python - 3.10.12
-system - Ubuntu
+Requirements:  
+Python - 3.10.12  
+system - Ubuntu  
 
 ```bash
 sudo apt install -y python3.10-venv
