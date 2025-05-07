@@ -14,7 +14,7 @@ This project focuses on simulating, capturing, and analyzing Domain Generation A
 | Tool           | Purpose                                                                 |
 |----------------|-------------------------------------------------------------------------|
 | [DNSExfiltrator](https://github.com/Arno0x/DNSExfiltrator) | Generate DNS tunneling traffic (data exfiltration). |
-| [dnsproxy](https://github.com/AdguardTeam/dnsproxy)       | DNS proxy server supporting DoH, DoT, DoQ, DNSCrypt. |
+| [dnsproxy](https://github.com/AdguardTeam/dnsproxy)       | Adguard DNS proxy server supporting DoH, DoT, DoQ, DNSCrypt. |
 | [CoreDNS](https://coredns.io/)                            | Pluggable DNS server for collecting and logging DNS queries. |
 | [doh-server](https://github.com/m13253/dns-over-https)    | DNS-over-HTTPS server for simulating encrypted DNS traffic. |
 | [dohlyzer](https://github.com/ahlashkari/DoHLyzer)           | Analyzes DoH traffic to detect anomalies and exfiltration. |
